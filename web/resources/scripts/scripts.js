@@ -3,24 +3,29 @@ var x_form = document.getElementById("form:X");
 var y_form = document.getElementById("Y");
 var r_form = document.getElementById("form:R");
 
-jQuery('document').ready(function() {
+function onAreaClicked (ev) {
 
-    //$('.R').click(function() {
-        //drawCanwas('canvas', this.value);
-        //$('#areaImg').prop('src', 'area.jsp?R=' + getCheckboxedValue('.R'));
-    //});
-
-    $('#photo').click(function(ev) {
         var r = document.getElementById("form:r_hidden").value;
         var x = (ev.offsetX - 100) / 50 * r;
         var y = (100 - ev.offsetY) / 50 * r;
         document.getElementById("form:x_hidden").value = x;
         document.getElementById("form:y_hidden").value = y;
         document.getElementById("form:submit").click();
-    });
+}
+
+function refreshAreaImage() {
+    document.getElementById('photo').src += '&x=x';
+}
+/*
+jQuery('document').ready(function() {
+    var rctl = document.getElementById('form:R_input');
+    var oldHandler = rctl.onchange;
+    rctl.onchange = function() {
+        oldHandler();
+        document.getElementById('photo').src += '&x=x';
+    };
 });
-
-
+*/
 //--------------------------------------------------------------------
 
 function drawCanwas(id, r){
