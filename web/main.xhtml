@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Lab_3</title>
+    <h:outputScript library="scripts" name="scripts.js"/>
+    <h:outputStylesheet library="css" name="main.css"/>
+</h:head>
+
+<h:body styleClass="main">
+    <div align="center">
+        <div class="header_1">
+            <table class="table_header_1">
+                <tr>
+                    <td ><label> Лабораторная работа № 3 </label></td>
+                </tr>
+            </table>
+        </div>
+
+        
+        <div class="header_2">
+            <table class="table_header_2">
+                <tr>
+                    <td><a href="https://se.ifmo.ru/courses/iaps#labs"> Вариант 2987 </a> </td>
+                </tr>
+                <tr>
+                    <td> Кузенкова Елизавета Владимировна </td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="container">
+            <td>
+                <tr class='area'>
+                    <div style="min-height: 210px">
+                        <p:graphicImage value="#{areaDrawer.image}" library="images" cache="false" id="photo"/>
+                    </div>
+                </tr>
+            </td>
+            <div align="center">
+                <h:form class="form" id="form" >
+                    <table>
+                        <td>
+                            <tr>
+                                <td>
+                                    X = <p:spinner id="X" min="-5" max="5" stepFactor="0.1" size="5" placeholder="(-5, 5)" value="#{info.x}">
+                                       <p:ajax update="x_hidden"/>
+                                    </p:spinner>
+                                    <h:inputText class="x_hidden" id="x_hidden" value="#{info.x}" style="display: none">
+                                        <p:ajax update="X"/>
+                                    </h:inputText>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Y = <h:inputText class="input_Y ui-inputfield ui-widget" id="Y" value="#{info.y}" size="5" a:placeholder = "(-3, 5)" >
+                                        <f:validateDoubleRange minimum="-3" maximum="5" for="Y"   />
+                                        <p:ajax update="y_hidden"/>
+                                    </h:inputText>
+                                    <h:inputText class="y_hidden" id="y_hidden" value="#{info.y}" style="display: none">
+                                        <p:ajax update="form:Y"/>
+                                    </h:inputText>
+                                    <h:message for="Y" id="Ymsg" styleClass="my-errr" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    R = <p:spinner id="R" min="1" max="3" stepFactor="0.5" size="5" placeholder="(1, 3)" value="#{info.r}">
+                                        <!--<p:ajax update=":photo"/>-->
+                                        <p:ajax update="@all"/>
+                                        <p:ajax update="r_hidden"/>
+                                    </p:spinner>
+                                    <h:inputText id="r_hidden" value="#{info.r}" style="display: none"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <h:commandButton class="button" id="submit" action="#{info.addInfo()}" type="submit" value="Проверить" />
+                                </td>
+                            </tr>
+                        </td>
+                    </table>
+                </h:form>
+            </div>
+        </div>
+        <h:panelGroup rendered="#{not empty info.infos}" id="table">
+                <div class="newWindow">
+                    <table id="beanTable">
+                        <tr>
+                            <th>X</th>
+                            <th>Y</th>
+                            <th>R</th>
+                            <th>Hit</th>
+                        </tr>
+                        <ui:repeat value="#{info.infos}" var="item">
+                            <tr>
+                                <td>#{item.x}</td>
+                                <td>#{item.y}</td>
+                                <td>#{item.r}</td>
+                                <td>
+                                    <h:outputLabel value="&#9989;" rendered="#{item.inArea == true}" />
+                                    <h:outputLabel value="&#10060;" rendered="#{item.inArea == false}" />
+                                </td>
+                            </tr>
+                        </ui:repeat>
+                    </table>
+                </div>
+            </h:panelGroup>
+        <div class="header_1">
+            <form action="faces/index.xhtml"><input type="submit" class="button" value="На стартовую"/></form>
+        </div>
+    </div>
+</h:body>
+</html>

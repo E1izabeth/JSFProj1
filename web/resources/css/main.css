@@ -1,0 +1,147 @@
+body{
+    background-size: 100%;
+    background-attachment: fixed;
+    text-align: center;
+}
+
+body.start{
+    background-image: url(images/back.jpg);
+    background-size: cover;
+    margin: 5%;
+}
+
+body.main{
+    background-image: url(images/back.jpg);
+    background-size: cover;
+    margin: 5%;
+}
+
+.header_1, .header_2, .container, #clockAndCalendar{
+    width: 800px;
+    border-radius: 15px;
+    background-color: rgba(238, 253, 247, 0.9);
+    font-family: monospace;
+    color: #000000;
+    border: 1px solid blue;
+    filter: alpha(Opacity=70);
+}
+
+.header_1 {
+    height: 55px;
+    font-size: 35px;
+    margin-bottom: 15px;
+}
+
+.header_2 {
+    height: 75px;
+    font-size: 25pt;
+}
+
+.my-errr {
+    font-size: 15pt;
+    background: lightsalmon;
+    color: red;
+    display: block;
+    clear: both;
+}
+
+.container {
+    font-size: 30px;
+    height: 460px;
+    margin-bottom: 15px;
+    margin-top: 15px;
+}
+
+#clockAndCalendar {
+    font-size: 25px;
+    height: 350px;
+}
+
+#clock {
+    height: 65px;
+    font-size: 30pt;
+    font-family: Arial, Helvetica, sans-serif;
+    color: blue;
+}
+
+.table_header_2 td {
+    font-size: 18pt;
+}
+
+table.input_table {
+    border-collapse: separate;
+    padding: 10px;
+    margin-right: 20px;
+    font-size: 25px;
+    border-spacing: 40px;
+    width: 780px;
+    height: 300px;
+    text-align: left;
+
+}
+
+#tableCalendar {
+    font-size: 20px;
+    border-collapse: collapse;
+    text-align: center;
+    border: 1px solid black;
+}
+
+#startTable td {
+    padding: 40px;
+}
+
+
+#tableCalendar td {
+    background: antiquewhite;
+    padding: 10px;
+}
+
+#tableCalendar caption {
+    font-weight: bold;
+}
+
+#tableCalendar th{
+    font-weight: bold;
+    background: lightsteelblue;
+}
+
+#beanTable td, #beanTable th, #tableCalendar td, #tableCalendar th {
+    border: 1px solid black;
+}
+
+#beanTable {
+    border-collapse: collapse;
+    text-align: center;
+    width: 800px;
+    border: 1px solid black;
+    font-size: 20px;
+}
+
+.newWindow{
+    display: inline-block;
+    width: 800px;
+    border-radius: 15px;
+    background-color: rgba(238, 253, 247, 0.9);
+    font-family: monospace;
+    color: #000000;
+    border: 1px solid blue;
+    filter: alpha(Opacity=70);
+    margin-bottom: 15px
+}
+
+.button {
+    width: 165px;
+    color: black;
+    height: 30px;
+    border-radius: 10px;
+    background-color: antiquewhite;
+    font-weight: bold;
+    align-content: center;
+}
+
+a {
+    color: black;
+    text-decoration: none !important;
+}
+

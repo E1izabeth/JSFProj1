@@ -1,0 +1,70 @@
+package checkInfo;
+
+import javax.persistence.*;
+import java.io.Serializable;
+
+@Entity(name = "info")
+public class Info implements Serializable{
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", nullable = false)
+    int id;
+    @Column(name = "X", nullable = false)
+    double X;
+    @Column(name = "Y", nullable = false)
+    double Y;
+    @Column(name = "R", nullable = false)
+    double R;
+    @Column(name = "is_in_area", nullable = false)
+    boolean isInArea;
+
+    public Info() {}
+
+    public Info(double x, double y, double r, boolean isInArea) {
+        X = x;
+        Y = y;
+        R = r;
+        this.isInArea = isInArea;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public double getX() {
+        return X;
+    }
+
+    public void setX(double x) {
+        X = x;
+    }
+
+    public double getY() {
+        return Y;
+    }
+
+    public void setY(double y) {
+        Y = y;
+    }
+
+    public double getR() {
+        return R;
+    }
+
+    public void setR(double r) {
+        R = r;
+    }
+
+    public boolean isInArea() {
+        return isInArea;
+    }
+
+    public void setInArea(boolean inArea) {
+        isInArea = inArea;
+    }
+}
