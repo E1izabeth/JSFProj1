@@ -28,6 +28,7 @@ import javax.servlet.ServletContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.stream.XMLStreamException;
 import org.hibernate.cfg.Configuration;
+import org.primefaces.component.log.Log;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 
@@ -70,90 +71,96 @@ public class AreaDrawer{
     }
     
     private StreamedContent DrawImpl() throws IOException, XMLStreamException, JAXBException {
-        ServletContext ctx = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
-        
-        InfoService ps = this.getBean("#{info}", InfoService.class);
-        
-        File localXmlFile = new File(ctx.getRealPath("/")+"/WEB-INF/FlatZone.xml");
-         
-        int r = 50; // for shape rendering
+        try{
+            ServletContext ctx = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
 
-        Unmarshaller un = JAXBContext.newInstance(ZoneType.class).createUnmarshaller();
-        XMLStreamReader xsr = XMLInputFactory.newFactory().createXMLStreamReader(new FileInputStream(localXmlFile));
+            InfoService ps = this.getBean("#{info}", InfoService.class);
 
-        ZoneType zone = (ZoneType) un.unmarshal(xsr, ZoneType.class).getValue();
+            File localXmlFile = new File(ctx.getRealPath("/")+"/WEB-INF/FlatZone.xml");
 
-        BufferedImage image = new BufferedImage(200, 200, BufferedImage.TYPE_INT_RGB);
-        final Graphics2D g = image.createGraphics();
-        g.setBackground(Color.white);
-        g.clearRect(0, 0, 200, 200);
+            int r = 50; // for shape rendering
 
-        AffineTransform labelsTransform = AffineTransform.getTranslateInstance(100, 100);
+            Unmarshaller un = JAXBContext.newInstance(ZoneType.class).createUnmarshaller();
+            XMLStreamReader xsr = XMLInputFactory.newFactory().createXMLStreamReader(new FileInputStream(localXmlFile));
 
-        AffineTransform shapeTransform = AffineTransform.getTranslateInstance(100, 100);
-        shapeTransform.concatenate(AffineTransform.getScaleInstance(1, -1));
-        g.setTransform(shapeTransform);
+            ZoneType zone = (ZoneType) un.unmarshal(xsr, ZoneType.class).getValue();
 
-        g.setPaint(Color.blue);
-        for (ShapeType o : zone.getTriangleOrCircleOrRectangle()) {
-            ZoneVisitor.apply(o, new ZoneVisitor() {
-                @Override
-                public void visitCircle(CircleType cir) {
-                    g.fillArc((int)((cir.getOX() - cir.getR())* r ), (int)((cir.getOY() - cir.getR())* r ), (int)(cir.getR() * r * 2), (int)(cir.getR() * r * 2), (int)(cir.getQuarter() * 90), 90);
-                }
+            BufferedImage image = new BufferedImage(200, 200, BufferedImage.TYPE_INT_RGB);
+            final Graphics2D g = image.createGraphics();
+            g.setBackground(Color.white);
+            g.clearRect(0, 0, 200, 200);
 
-                @Override
-                public void visitRectangle(RectangleType rect) {
-                    g.fillRect((int)(rect.getX() * r), (int)(rect.getY() * r), (int)(rect.getW() * r), (int)(rect.getH() * r));
-                }
+            AffineTransform labelsTransform = AffineTransform.getTranslateInstance(100, 100);
 
-                @Override
-                public void visitTriangle(TriangleType tri) {
-                    int[] xp = {(int)(tri.getX1() * r), (int)(tri.getX2() * r), (int)(tri.getX3() * r)};
-                    int[] yp = {(int)(tri.getY1() * r), (int)(tri.getY2() * r), (int)(tri.getY3() * r)};
+            AffineTransform shapeTransform = AffineTransform.getTranslateInstance(100, 100);
+            shapeTransform.concatenate(AffineTransform.getScaleInstance(1, -1));
+            g.setTransform(shapeTransform);
 
-                    g.fillPolygon(xp, yp, 3);
-                }
-            });
-        }
+            g.setPaint(Color.blue);
+            for (ShapeType o : zone.getTriangleOrCircleOrRectangle()) {
+                ZoneVisitor.apply(o, new ZoneVisitor() {
+                    @Override
+                    public void visitCircle(CircleType cir) {
+                        g.fillArc((int)((cir.getOX() - cir.getR())* r ), (int)((cir.getOY() - cir.getR())* r ), (int)(cir.getR() * r * 2), (int)(cir.getR() * r * 2), (int)(cir.getQuarter() * 90), 90);
+                    }
 
-        g.setPaint(Color.magenta);
-        
-        LinkedList<Info> list = ps.getInfos();
-        if (list != null ) {
-            for (Info info : list) {
-                if(info.getR() == ps.getR())
-                {
-                if(info.isInArea())
-                    g.setPaint(Color.green);
-                else
-                    g.setPaint(Color.red);
-                g.fillArc((int) (info.getX() * r/info.getR() - 3), (int) (info.getY() * r / info.getR() - 3), 7, 7, 0, 360);
+                    @Override
+                    public void visitRectangle(RectangleType rect) {
+                        g.fillRect((int)(rect.getX() * r), (int)(rect.getY() * r), (int)(rect.getW() * r), (int)(rect.getH() * r));
+                    }
+
+                    @Override
+                    public void visitTriangle(TriangleType tri) {
+                        int[] xp = {(int)(tri.getX1() * r), (int)(tri.getX2() * r), (int)(tri.getX3() * r)};
+                        int[] yp = {(int)(tri.getY1() * r), (int)(tri.getY2() * r), (int)(tri.getY3() * r)};
+
+                        g.fillPolygon(xp, yp, 3);
+                    }
+                });
+            }
+
+            g.setPaint(Color.magenta);
+
+            LinkedList<Info> list = ps.getInfos();
+            if (list != null ) {
+                for (Info info : list) {
+                    if(info.getR() == ps.getR())
+                    {
+                    if(info.isInArea())
+                        g.setPaint(Color.green);
+                    else
+                        g.setPaint(Color.red);
+                    g.fillArc((int) (info.getX() * r/info.getR() - 3), (int) (info.getY() * r / info.getR() - 3), 7, 7, 0, 360);
+                    }
                 }
             }
+            g.setTransform(labelsTransform);
+            g.setPaint(Color.black);
+
+            String rStr = Double.toString(ps.getR());
+
+            Font f = g.getFont();
+            Font f2 = f.deriveFont(10);
+            g.setFont(f2);
+            g.drawString("0", 0, 0);
+            g.drawString(rStr, r, 0);
+            g.drawString(rStr, 0, -r);
+            g.drawString("-" + rStr, -r, 0);
+            g.drawString("-" + rStr, 0, r);
+
+            g.drawLine(0, 100, 0, -100);
+            g.drawLine(-100, 0, 100, 0);
+
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            ImageIO.write(image, "png", out);
+            out.flush();
+
+            StreamedContent result = new DefaultStreamedContent(new ByteArrayInputStream(out.toByteArray()), "image/png");
+            return result;
         }
-        g.setTransform(labelsTransform);
-        g.setPaint(Color.black);
-        
-        String rStr = Double.toString(ps.getR());
-        
-        Font f = g.getFont();
-        Font f2 = f.deriveFont(10);
-        g.setFont(f2);
-        g.drawString("0", 0, 0);
-        g.drawString(rStr, r, 0);
-        g.drawString(rStr, 0, -r);
-        g.drawString("-" + rStr, -r, 0);
-        g.drawString("-" + rStr, 0, r);
-
-        g.drawLine(0, 100, 0, -100);
-        g.drawLine(-100, 0, 100, 0);
-
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        ImageIO.write(image, "png", out);
-        out.flush();
-        
-        StreamedContent result = new DefaultStreamedContent(new ByteArrayInputStream(out.toByteArray()), "image/png");
-        return result;
+        catch(Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
     }
 }

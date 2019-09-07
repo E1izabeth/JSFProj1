@@ -73,14 +73,16 @@ public class InfoService implements Serializable {
         Session session = HibernateUtil.getSessionFactory().openSession();
         session.beginTransaction();
         Info info = new Info(getX(),getY(),getR(),getIsInArea());
-        infos.add(info);
-        session.save(info);
-        session.getTransaction().commit();
-        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-        try {
-            ec.redirect(((HttpServletRequest) ec.getRequest()).getRequestURI());
-        } catch (IOException e) {
-            //
+        if(getX() >= -5 && getX() <= 5 && getY() >= -3 && getY() <= 5 && getR() >= 1 && getR() <= 3){
+            infos.add(info);
+            session.save(info);
+            session.getTransaction().commit();
+            ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+            try {
+                ec.redirect(((HttpServletRequest) ec.getRequest()).getRequestURI());
+            } catch (IOException e) {
+                //
+            }
         }
     }
 

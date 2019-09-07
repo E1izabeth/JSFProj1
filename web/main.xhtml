@@ -63,6 +63,10 @@
                                     <h:inputText class="y_hidden" id="y_hidden" value="#{info.y}" style="display: none">
                                         <p:ajax update="form:Y"/>
                                     </h:inputText>
+                                    
+                                    <h:outputText id="r-output"/>
+                                    <h:inputHidden id="r-input"/>
+                                    <p:slider for="r-input" minValue="1" maxValue="4" step="1"/>
                                 </td>
                             </tr>
                             <tr>
